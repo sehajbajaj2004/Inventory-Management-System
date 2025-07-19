@@ -125,7 +125,7 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: 728006c51109ef5448198db4a86ee371, type: 3}
   itemDescription: This magical drink helps you wake you up in the morning.
   itemType: 2
-  usableType: 0
+  usableType: 1
   dropPrefab: {fileID: 4650103111907331529}
 --- !u!54 &8825641566217175323
 Rigidbody:

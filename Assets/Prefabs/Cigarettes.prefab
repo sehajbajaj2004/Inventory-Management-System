@@ -124,7 +124,7 @@ MonoBehaviour:
   itemSprite: {fileID: 21300000, guid: 69d9fbf850ce0c8418587cda1f186b2c, type: 3}
   itemDescription: This substance is not good for your health.
   itemType: 2
-  usableType: 0
+  usableType: 1
   dropPrefab: {fileID: 542810524071779609}
 --- !u!54 &9063360624463599060
 Rigidbody:

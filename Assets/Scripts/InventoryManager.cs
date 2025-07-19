@@ -18,10 +18,12 @@ public class InventoryManager : MonoBehaviour
     [Header("World Drop")]
     public Transform dropTransform;
 
-
     private bool menuActivated = false;
     private Dictionary<string, InventoryItemData> itemDictionary = new Dictionary<string, InventoryItemData>();
     private List<ItemSlot> currentSlots = new List<ItemSlot>();
+
+    // Track the selected item
+    private string selectedItemName = null;
 
     void Update()
     {
@@ -29,14 +31,12 @@ public class InventoryManager : MonoBehaviour
         {
             menuActivated = !menuActivated;
             inventoryMenu.SetActive(menuActivated);
-            // Time.timeScale = menuActivated ? 0 : 1;
-
             Cursor.visible = menuActivated;
             Cursor.lockState = menuActivated ? CursorLockMode.None : CursorLockMode.Locked;
         }
     }
 
-    public void AddItem(string itemName, int quantity, Sprite sprite, string description = "", GameObject dropPrefab = null)
+    public void AddItem(string itemName, int quantity, Sprite sprite, string description = "", GameObject dropPrefab = null, UsableType usableType = UsableType.None)
     {
         if (itemDictionary.ContainsKey(itemName))
         {
@@ -50,7 +50,8 @@ public class InventoryManager : MonoBehaviour
                 quantity = quantity,
                 icon = sprite,
                 description = description,
-                dropPrefab = dropPrefab // ← ADD THIS
+                dropPrefab = dropPrefab,
+                usableType = usableType
             };
             itemDictionary.Add(itemName, newItem);
         }
@@ -120,6 +121,8 @@ public class InventoryManager : MonoBehaviour
         descriptionText.text = desc;
         descriptionImage.sprite = icon;
         descriptionImage.enabled = true;
+
+        selectedItemName = heading; // Store selected item
     }
 
     public void ClearDescription()
@@ -128,6 +131,8 @@ public class InventoryManager : MonoBehaviour
         descriptionText.text = "";
         descriptionImage.sprite = null;
         descriptionImage.enabled = false;
+
+        selectedItemName = null;
     }
 
     public bool HasItem(string itemName, int minQuantity = 1)
@@ -153,6 +158,25 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // === ✅ USE BUTTON SUPPORT ===
+    public void UseSelectedItem()
+    {
+        if (string.IsNullOrEmpty(selectedItemName)) return;
+
+        if (itemDictionary.TryGetValue(selectedItemName, out InventoryItemData item))
+        {
+            if (item.usableType == UsableType.Consumable)
+            {
+                Debug.Log($"Used {selectedItemName}");
+                ReduceItem(selectedItemName, 1);
+                // Add your item effect logic here (healing, buff, etc.)
+            }
+            else
+            {
+                Debug.Log($"{selectedItemName} is not consumable.");
+            }
+        }
+    }
 
     private class InventoryItemData
     {
@@ -161,6 +185,6 @@ public class InventoryManager : MonoBehaviour
         public Sprite icon;
         public string description;
         public GameObject dropPrefab;
+        public UsableType usableType;
     }
-
 }

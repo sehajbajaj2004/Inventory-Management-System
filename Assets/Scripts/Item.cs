@@ -68,7 +68,9 @@ public class Item : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && itemType == ItemType.Pickable)
         {
             FindObjectOfType<InspectManager>()?.ForceStopInspecting();
-            inventoryManager.AddItem(itemName, quantity, itemSprite, itemDescription, dropPrefab);
+
+            inventoryManager.AddItem(itemName, quantity, itemSprite, itemDescription, dropPrefab, usableType);
+
             itemType = ItemType.Usable;
             instructionManager?.HidePrompts();
 
