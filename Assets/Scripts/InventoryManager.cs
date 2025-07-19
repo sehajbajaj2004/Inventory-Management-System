@@ -1,0 +1,166 @@
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class InventoryManager : MonoBehaviour
+{
+    [Header("Inventory UI")]
+    public GameObject inventoryMenu;
+    public GameObject itemSlotPrefab;
+    public Transform itemSlotParent;
+
+    [Header("Description Area")]
+    public TMP_Text descriptionHeading;
+    public TMP_Text descriptionText;
+    public Image descriptionImage;
+
+    [Header("World Drop")]
+    public Transform dropTransform;
+
+
+    private bool menuActivated = false;
+    private Dictionary<string, InventoryItemData> itemDictionary = new Dictionary<string, InventoryItemData>();
+    private List<ItemSlot> currentSlots = new List<ItemSlot>();
+
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            menuActivated = !menuActivated;
+            inventoryMenu.SetActive(menuActivated);
+            // Time.timeScale = menuActivated ? 0 : 1;
+
+            Cursor.visible = menuActivated;
+            Cursor.lockState = menuActivated ? CursorLockMode.None : CursorLockMode.Locked;
+        }
+    }
+
+    public void AddItem(string itemName, int quantity, Sprite sprite, string description = "", GameObject dropPrefab = null)
+    {
+        if (itemDictionary.ContainsKey(itemName))
+        {
+            itemDictionary[itemName].quantity += quantity;
+        }
+        else
+        {
+            InventoryItemData newItem = new InventoryItemData
+            {
+                itemName = itemName,
+                quantity = quantity,
+                icon = sprite,
+                description = description,
+                dropPrefab = dropPrefab // ← ADD THIS
+            };
+            itemDictionary.Add(itemName, newItem);
+        }
+
+        RefreshInventoryUI();
+    }
+
+    public void DropItem(string itemName)
+    {
+        if (!itemDictionary.ContainsKey(itemName)) return;
+
+        GameObject dropPrefab = itemDictionary[itemName].dropPrefab;
+
+        if (dropPrefab == null)
+        {
+            Debug.LogWarning($"Drop prefab not assigned for: {itemName}");
+            return;
+        }
+
+        GameObject dropped = Instantiate(dropPrefab, dropTransform.position, Quaternion.identity);
+
+        Rigidbody rb = dropped.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 randomForce = new Vector3(
+                Random.Range(-2f, 2f),
+                Random.Range(2f, 5f),
+                Random.Range(-2f, 2f)
+            );
+            rb.AddForce(randomForce, ForceMode.Impulse);
+        }
+
+        ReduceItem(itemName, 1);
+    }
+
+    private void RefreshInventoryUI()
+    {
+        foreach (Transform child in itemSlotParent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        currentSlots.Clear();
+
+        foreach (var item in itemDictionary.Values)
+        {
+            GameObject slotGO = Instantiate(itemSlotPrefab, itemSlotParent);
+            ItemSlot slot = slotGO.GetComponent<ItemSlot>();
+            slot.SetSlot(item.itemName, item.quantity, item.icon, item.description, this);
+            currentSlots.Add(slot);
+        }
+
+        ClearDescription();
+    }
+
+    public void DeselectAllSlots()
+    {
+        foreach (var slot in currentSlots)
+        {
+            slot.Deselect();
+        }
+    }
+
+    public void ShowDescription(string heading, string desc, Sprite icon)
+    {
+        descriptionHeading.text = heading;
+        descriptionText.text = desc;
+        descriptionImage.sprite = icon;
+        descriptionImage.enabled = true;
+    }
+
+    public void ClearDescription()
+    {
+        descriptionHeading.text = "";
+        descriptionText.text = "";
+        descriptionImage.sprite = null;
+        descriptionImage.enabled = false;
+    }
+
+    public bool HasItem(string itemName, int minQuantity = 1)
+    {
+        return itemDictionary.ContainsKey(itemName) && itemDictionary[itemName].quantity >= minQuantity;
+    }
+
+    public int GetItemCount(string itemName)
+    {
+        return itemDictionary.ContainsKey(itemName) ? itemDictionary[itemName].quantity : 0;
+    }
+
+    public void ReduceItem(string itemName, int amount)
+    {
+        if (itemDictionary.ContainsKey(itemName))
+        {
+            itemDictionary[itemName].quantity -= amount;
+            if (itemDictionary[itemName].quantity <= 0)
+            {
+                itemDictionary.Remove(itemName);
+            }
+            RefreshInventoryUI();
+        }
+    }
+
+
+    private class InventoryItemData
+    {
+        public string itemName;
+        public int quantity;
+        public Sprite icon;
+        public string description;
+        public GameObject dropPrefab;
+    }
+
+}
