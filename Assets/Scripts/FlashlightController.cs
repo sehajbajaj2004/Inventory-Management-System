@@ -8,14 +8,14 @@ public class FlashlightController : MonoBehaviour
     [Header("Flashlight References")]
     public GameObject flashLightPointLight;
     public GameObject flashlightArms;
-    public Light flashLight; // Assign the light component
-    public GameObject batteryUsedUI; // UI element to show for 5 sec
-    public Image[] batteryUIIcons; // Array of 6 battery UI images
+    public Light flashLight;
+    public GameObject batteryUsedUI;
+    public Image[] batteryUIIcons;
 
     [Header("Flashlight Settings")]
     public float maxIntensity = 2f;
     public float minIntensity = 0.5f;
-    public float batteryDuration = 60f; // 1 minute
+    public float batteryDuration = 60f;
 
     private bool flashState = false;
     private InventoryManager inventoryManager;
@@ -90,6 +90,19 @@ public class FlashlightController : MonoBehaviour
         for (int i = 0; i < count; i++) batteries.Enqueue("Battery");
     }
 
+    // void ToggleFlashlight(bool state)
+    // {
+    //     flashLightPointLight.SetActive(state);
+    //     flashState = state;
+    // }
+
+    // void UpdateBatteryQueue()
+    // {
+    //     batteries.Clear();
+    //     int count = inventoryManager.GetItemCount("Battery");
+    //     for (int i = 0; i < count; i++) batteries.Enqueue("Battery");
+    // }
+
     void UpdateBatteryUI()
     {
         int count = batteries.Count;
@@ -105,4 +118,10 @@ public class FlashlightController : MonoBehaviour
         yield return new WaitForSeconds(5f);
         batteryUsedUI.SetActive(false);
     }
+    // IEnumerator ShowBatteryUsedUI()
+    // {
+    //     batteryUsedUI.SetActive(true);
+    //     yield return new WaitForSeconds(5f);
+    //     batteryUsedUI.SetActive(false);
+    // }
 }
