@@ -158,10 +158,16 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // === ✅ USE BUTTON SUPPORT ===
+    // Replace the UseSelectedItem and UseBattery methods with:
     public void UseSelectedItem()
     {
         if (string.IsNullOrEmpty(selectedItemName)) return;
+
+        if (selectedItemName == "Battery")
+        {
+            UseBattery();
+            return;
+        }
 
         if (itemDictionary.TryGetValue(selectedItemName, out InventoryItemData item))
         {
@@ -169,11 +175,20 @@ public class InventoryManager : MonoBehaviour
             {
                 Debug.Log($"Used {selectedItemName}");
                 ReduceItem(selectedItemName, 1);
-                // Add your item effect logic here (healing, buff, etc.)
+                // Add item-specific effects here
             }
-            else
+        }
+    }
+
+    public void UseBattery()
+    {
+        if (HasItem("Battery", 1))
+        {
+            FlashlightController flashlight = FindObjectOfType<FlashlightController>();
+            if (flashlight != null)
             {
-                Debug.Log($"{selectedItemName} is not consumable.");
+                flashlight.AddBatteryToFlashlight();
+                ReduceItem("Battery", 1); // Remove from inventory
             }
         }
     }

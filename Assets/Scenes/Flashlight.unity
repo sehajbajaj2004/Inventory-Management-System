@@ -383,7 +383,7 @@ MonoBehaviour:
   itemDescription: This is a 1.5V AA Battery. Use this to power your flashlight.
     One battery lasts only for 2 minues, so use this carefully!
   itemType: 1
-  usableType: 0
+  usableType: 1
   dropPrefab: {fileID: 1694986275143728956, guid: c0c1f58b7b43c4846b9951a647580024,
     type: 3}
 --- !u!1 &113812972
@@ -1141,7 +1141,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 396.7575, y: -90.3085}
+  m_AnchoredPosition: {x: 396.7575, y: -114.31549}
   m_SizeDelta: {x: 120, y: 120}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &418270891
@@ -1217,7 +1217,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 396.7575, y: -732.75354}
+  m_AnchoredPosition: {x: 396.7575, y: -708.7465}
   m_SizeDelta: {x: 193.14, y: 92.29}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &479132841
@@ -1540,8 +1540,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 293.855, y: -61.239998}
-  m_SizeDelta: {x: 472.2, y: 58.48}
+  m_AnchoredPosition: {x: 245.159, y: -45.882}
+  m_SizeDelta: {x: 472.2, y: 27.764}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &542101708
 MonoBehaviour:
@@ -2612,7 +2612,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 396.7575, y: -559.2585}
-  m_SizeDelta: {x: 587.71, y: 204.7}
+  m_SizeDelta: {x: 490.318, y: 156.686}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &885979201
 MonoBehaviour:
@@ -2715,7 +2715,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 396.7575, y: -303.60852}
+  m_AnchoredPosition: {x: 396.7575, y: -327.61548}
   m_SizeDelta: {x: 717.375, y: 256.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &912110466
@@ -3023,7 +3023,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1054782490}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
@@ -3032,7 +3032,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -155, y: 0}
+  m_AnchoredPosition: {x: -155, y: 0.00002670288}
   m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1054782492
@@ -3159,6 +3159,18 @@ MonoBehaviour:
       - m_Target: {fileID: 1241383184}
         m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
         m_MethodName: UseSelectedItem
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1241383184}
+        m_TargetAssemblyTypeName: InventoryManager, Assembly-CSharp
+        m_MethodName: UseBattery
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5413,8 +5425,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 293.855, y: -147.59001}
-  m_SizeDelta: {x: 472.2, y: 58.48}
+  m_AnchoredPosition: {x: 245.159, y: -108.225006}
+  m_SizeDelta: {x: 472.2, y: 27.764}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1822359895
 MonoBehaviour:
@@ -10063,7 +10075,7 @@ MonoBehaviour:
   itemDescription: This is a 1.5V AA Battery. Use this to power your flashlight.
     One battery lasts only for 2 minues, so use this carefully!
   itemType: 1
-  usableType: 0
+  usableType: 1
   dropPrefab: {fileID: 1694986275143728956, guid: c0c1f58b7b43c4846b9951a647580024,
     type: 3}
 --- !u!33 &3469287836892624176
@@ -10113,7 +10125,7 @@ MonoBehaviour:
   itemDescription: This is a 1.5V AA Battery. Use this to power your flashlight.
     One battery lasts only for 2 minues, so use this carefully!
   itemType: 1
-  usableType: 0
+  usableType: 1
   dropPrefab: {fileID: 1694986275143728956, guid: c0c1f58b7b43c4846b9951a647580024,
     type: 3}
 --- !u!33 &3469287837109158279
@@ -10163,7 +10175,7 @@ MonoBehaviour:
   itemDescription: This is a 1.5V AA Battery. Use this to power your flashlight.
     One battery lasts only for 2 minues, so use this carefully!
   itemType: 1
-  usableType: 0
+  usableType: 1
   dropPrefab: {fileID: 1694986275143728956, guid: c0c1f58b7b43c4846b9951a647580024,
     type: 3}
 --- !u!33 &3469287837380871262
@@ -10213,7 +10225,7 @@ MonoBehaviour:
   itemDescription: This is a 1.5V AA Battery. Use this to power your flashlight.
     One battery lasts only for 2 minues, so use this carefully!
   itemType: 1
-  usableType: 0
+  usableType: 1
   dropPrefab: {fileID: 1694986275143728956, guid: c0c1f58b7b43c4846b9951a647580024,
     type: 3}
 --- !u!4 &3484031389509312660
@@ -10280,7 +10292,7 @@ MonoBehaviour:
   itemDescription: This is a 1.5V AA Battery. Use this to power your flashlight.
     One battery lasts only for 2 minues, so use this carefully!
   itemType: 1
-  usableType: 0
+  usableType: 1
   dropPrefab: {fileID: 1694986275143728956, guid: c0c1f58b7b43c4846b9951a647580024,
     type: 3}
 --- !u!4 &3536776065162577355

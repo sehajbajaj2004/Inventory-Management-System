@@ -33,6 +33,8 @@ public class Item : MonoBehaviour
     private InventoryManager inventoryManager;
     private InstructionManager instructionManager;
 
+    private static bool batteryInspected = false;
+
     private void Start()
     {
         inventoryManager = FindObjectOfType<InventoryManager>();
@@ -41,6 +43,48 @@ public class Item : MonoBehaviour
         if (dropPrefab == null) dropPrefab = gameObject;
 
         instructionManager?.HidePrompts();
+
+        // If this is a battery and one has already been inspected, make it pickable
+        if (itemName == "Battery" && batteryInspected)
+        {
+            itemType = ItemType.Pickable;
+        }
+    }
+
+    private void Update()
+    {
+        if (!playerInRange) return;
+
+        if (Input.GetKeyDown(KeyCode.E) && itemType == ItemType.Pickable)
+        {
+            FindObjectOfType<InspectManager>()?.ForceStopInspecting();
+
+            inventoryManager.AddItem(itemName, quantity, itemSprite, itemDescription, dropPrefab, 
+            itemName == "Battery" ? UsableType.Consumable : usableType);
+
+            // If this is a battery, mark that one has been inspected
+            if (itemName == "Battery")
+            {
+                batteryInspected = true;
+                MakeAllBatteriesPickable();
+            }
+
+            instructionManager?.HidePrompts();
+            Destroy(gameObject);
+        }
+    }
+
+    private void MakeAllBatteriesPickable()
+    {
+        Item[] allBatteries = FindObjectsOfType<Item>();
+        foreach (Item item in allBatteries)
+        {
+            if (item.itemName == "Battery" && item.itemType == ItemType.Inspectable)
+            {
+                item.itemType = ItemType.Pickable;
+                item.instructionManager?.UpdatePrompts(ItemType.Pickable);
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -58,24 +102,6 @@ public class Item : MonoBehaviour
         {
             playerInRange = false;
             instructionManager?.HidePrompts();
-        }
-    }
-
-    private void Update()
-    {
-        if (!playerInRange) return;
-
-        if (Input.GetKeyDown(KeyCode.E) && itemType == ItemType.Pickable)
-        {
-            FindObjectOfType<InspectManager>()?.ForceStopInspecting();
-
-            inventoryManager.AddItem(itemName, quantity, itemSprite, itemDescription, dropPrefab, usableType);
-
-            itemType = ItemType.Usable;
-            instructionManager?.HidePrompts();
-
-            if (dropPrefab == null) dropPrefab = gameObject;
-            Destroy(gameObject);
         }
     }
 

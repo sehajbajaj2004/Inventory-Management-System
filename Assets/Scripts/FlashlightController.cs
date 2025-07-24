@@ -19,20 +19,17 @@ public class FlashlightController : MonoBehaviour
 
     private bool flashState = false;
     private InventoryManager inventoryManager;
-    private Queue<string> batteries = new Queue<string>();
+    private Queue<string> activeBatteries = new Queue<string>(); // Batteries currently in use
     private float batteryTimer = 0f;
-    // private bool isConsumingBattery = false;
 
     void Start()
     {
         inventoryManager = GameObject.Find("Inventory Canvas").GetComponent<InventoryManager>();
-        UpdateBatteryQueue();
         UpdateBatteryUI();
     }
 
     void Update()
     {
-        // Check flashlight availability
         bool hasFlashlight = inventoryManager.HasItem("Flashlight", 1);
         flashlightArms.SetActive(hasFlashlight);
 
@@ -42,22 +39,16 @@ public class FlashlightController : MonoBehaviour
             return;
         }
 
-        if (batteries.Count != inventoryManager.GetItemCount("Battery"))
-        {
-            UpdateBatteryQueue();
-            UpdateBatteryUI();
-        }
-
         if (Input.GetKeyDown(KeyCode.C))
         {
-            if (batteries.Count > 0)
+            if (activeBatteries.Count > 0)
             {
                 flashState = !flashState;
                 ToggleFlashlight(flashState);
             }
         }
 
-        if (flashState && batteries.Count > 0)
+        if (flashState && activeBatteries.Count > 0)
         {
             batteryTimer += Time.deltaTime;
             float t = 1f - (batteryTimer / batteryDuration);
@@ -66,11 +57,25 @@ public class FlashlightController : MonoBehaviour
             if (batteryTimer >= batteryDuration)
             {
                 batteryTimer = 0f;
-                batteries.Dequeue();
+                activeBatteries.Dequeue();
                 inventoryManager.ReduceItem("Battery", 1);
                 UpdateBatteryUI();
                 StartCoroutine(ShowBatteryUsedUI());
+                
+                if (activeBatteries.Count == 0)
+                {
+                    ToggleFlashlight(false);
+                }
             }
+        }
+    }
+
+    public void AddBatteryToFlashlight()
+    {
+        if (inventoryManager.HasItem("Battery", 1))
+        {
+            activeBatteries.Enqueue("Battery");
+            UpdateBatteryUI();
         }
     }
 
@@ -80,29 +85,9 @@ public class FlashlightController : MonoBehaviour
         flashState = state;
     }
 
-    void UpdateBatteryQueue()
-    {
-        batteries.Clear();
-        int count = inventoryManager.GetItemCount("Battery");
-        for (int i = 0; i < count; i++) batteries.Enqueue("Battery");
-    }
-
-    // void ToggleFlashlight(bool state)
-    // {
-    //     flashLightPointLight.SetActive(state);
-    //     flashState = state;
-    // }
-
-    // void UpdateBatteryQueue()
-    // {
-    //     batteries.Clear();
-    //     int count = inventoryManager.GetItemCount("Battery");
-    //     for (int i = 0; i < count; i++) batteries.Enqueue("Battery");
-    // }
-
     void UpdateBatteryUI()
     {
-        int count = batteries.Count;
+        int count = activeBatteries.Count;
         for (int i = 0; i < batteryUIIcons.Length; i++)
         {
             batteryUIIcons[i].enabled = i < count;
@@ -115,10 +100,4 @@ public class FlashlightController : MonoBehaviour
         yield return new WaitForSeconds(5f);
         batteryUsedUI.SetActive(false);
     }
-    // IEnumerator ShowBatteryUsedUI()
-    // {
-    //     batteryUsedUI.SetActive(true);
-    //     yield return new WaitForSeconds(5f);
-    //     batteryUsedUI.SetActive(false);
-    // }
 }
