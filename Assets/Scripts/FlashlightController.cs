@@ -42,14 +42,12 @@ public class FlashlightController : MonoBehaviour
             return;
         }
 
-        // Update battery queue if inventory changed
         if (batteries.Count != inventoryManager.GetItemCount("Battery"))
         {
             UpdateBatteryQueue();
             UpdateBatteryUI();
         }
 
-        // Toggle flashlight with C
         if (Input.GetKeyDown(KeyCode.C))
         {
             if (batteries.Count > 0)
@@ -59,7 +57,6 @@ public class FlashlightController : MonoBehaviour
             }
         }
 
-        // Consume battery when flashlight is on
         if (flashState && batteries.Count > 0)
         {
             batteryTimer += Time.deltaTime;
@@ -70,7 +67,7 @@ public class FlashlightController : MonoBehaviour
             {
                 batteryTimer = 0f;
                 batteries.Dequeue();
-                inventoryManager.ReduceItem("Battery", 1); // You'll need to create this method
+                inventoryManager.ReduceItem("Battery", 1);
                 UpdateBatteryUI();
                 StartCoroutine(ShowBatteryUsedUI());
             }
