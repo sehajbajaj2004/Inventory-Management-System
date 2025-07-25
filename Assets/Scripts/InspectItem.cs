@@ -6,6 +6,9 @@ public class InspectManager : MonoBehaviour
     public Transform offsetPosition;
     public float inspectDistance = 3f;
     public LayerMask inspectLayer;
+    public float zoomSpeed = 1f;
+    public float minZoom = -2f;
+    public float maxZoom = 5f;
 
     private Transform currentTarget;
     private bool isExamining = false;
@@ -14,6 +17,7 @@ public class InspectManager : MonoBehaviour
     private Vector3 lastMousePos;
 
     private Item currentItem;
+    private float currentZoom = 0f;
 
     void Update()
     {
@@ -37,6 +41,8 @@ public class InspectManager : MonoBehaviour
         if (isExamining)
         {
             RotateInspectedObject();
+            HandleZoom();
+            CheckDistanceFromOriginal(); // 👈 Check if user walked away
         }
     }
 
@@ -61,14 +67,15 @@ public class InspectManager : MonoBehaviour
     void StartInspecting()
     {
         isExamining = true;
-
         originalPos = currentTarget.position;
         originalRot = currentTarget.rotation;
+        currentZoom = 0f;
 
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
         currentTarget.position = offsetPosition.position;
+
         lastMousePos = Input.mousePosition;
 
         Rigidbody rb = currentTarget.GetComponent<Rigidbody>();
@@ -80,8 +87,12 @@ public class InspectManager : MonoBehaviour
             rb.isKinematic = true;
         }
 
+        // ENABLE THIS FOR NORMAL LEVELS
         if (currentItem != null)
         {
+            
+        }
+        if(currentItem.itemName == "Flashlight" || currentItem.itemName == "Battery"){
             currentItem.MarkAsPickable();
         }
     }
@@ -104,6 +115,9 @@ public class InspectManager : MonoBehaviour
                 rb.isKinematic = false;
             }
         }
+
+        currentTarget = null;
+        currentItem = null;
     }
 
     void RotateInspectedObject()
@@ -114,13 +128,28 @@ public class InspectManager : MonoBehaviour
         lastMousePos = Input.mousePosition;
     }
 
+    void HandleZoom()
+    {
+        float scroll = Input.GetAxis("Mouse ScrollWheel");
+        if (scroll != 0f)
+        {
+            currentZoom = Mathf.Clamp(currentZoom - scroll * zoomSpeed, minZoom, maxZoom);
+            currentTarget.position = offsetPosition.position + playerCamera.transform.forward * currentZoom;
+        }
+    }
+
+    void CheckDistanceFromOriginal()
+    {
+        float distance = Vector3.Distance(playerCamera.transform.position, originalPos);
+        if (distance > inspectDistance + 0.5f) // added margin
+        {
+            StopInspecting();
+        }
+    }
+
     public void ForceStopInspecting()
     {
         if (!isExamining || currentTarget == null) return;
-
         StopInspecting();
-        currentTarget = null;
-        currentItem = null;
     }
-
 }

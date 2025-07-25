@@ -17,7 +17,7 @@ public enum UsableType
 
 public class Item : MonoBehaviour
 {
-    [SerializeField] private string itemName;
+    public string itemName;
     [SerializeField] private int quantity = 1;
     [SerializeField] private Sprite itemSprite;
     [SerializeField] [TextArea] private string itemDescription;
@@ -68,6 +68,7 @@ public class Item : MonoBehaviour
                 batteryInspected = true;
                 MakeAllBatteriesPickable();
             }
+            FindObjectOfType<GameManager>()?.OnItemPickedUp(this);
 
             instructionManager?.HidePrompts();
             Destroy(gameObject);
