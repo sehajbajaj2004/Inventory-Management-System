@@ -44,7 +44,6 @@ public class Item : MonoBehaviour
 
         instructionManager?.HidePrompts();
 
-        // If this is a battery and one has already been inspected, make it pickable
         if (itemName == "Battery" && batteryInspected)
         {
             itemType = ItemType.Pickable;
@@ -62,7 +61,6 @@ public class Item : MonoBehaviour
             inventoryManager.AddItem(itemName, quantity, itemSprite, itemDescription, dropPrefab, 
             itemName == "Battery" ? UsableType.Consumable : usableType);
 
-            // If this is a battery, mark that one has been inspected
             if (itemName == "Battery")
             {
                 batteryInspected = true;

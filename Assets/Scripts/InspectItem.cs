@@ -42,7 +42,7 @@ public class InspectManager : MonoBehaviour
         {
             RotateInspectedObject();
             HandleZoom();
-            CheckDistanceFromOriginal(); // 👈 Check if user walked away
+            CheckDistanceFromOriginal();
         }
     }
 
@@ -141,7 +141,7 @@ public class InspectManager : MonoBehaviour
     void CheckDistanceFromOriginal()
     {
         float distance = Vector3.Distance(playerCamera.transform.position, originalPos);
-        if (distance > inspectDistance + 0.5f) // added margin
+        if (distance > inspectDistance + 0.5f)
         {
             StopInspecting();
         }

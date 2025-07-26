@@ -158,7 +158,6 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // Replace the UseSelectedItem and UseBattery methods with:
     public void UseSelectedItem()
     {
         if (string.IsNullOrEmpty(selectedItemName)) return;
@@ -175,7 +174,6 @@ public class InventoryManager : MonoBehaviour
             {
                 Debug.Log($"Used {selectedItemName}");
                 ReduceItem(selectedItemName, 1);
-                // Add item-specific effects here
             }
         }
     }
@@ -188,7 +186,7 @@ public class InventoryManager : MonoBehaviour
             if (flashlight != null)
             {
                 flashlight.AddBatteryToFlashlight();
-                ReduceItem("Battery", 1); // Remove from inventory
+                ReduceItem("Battery", 1);
             }
         }
     }
